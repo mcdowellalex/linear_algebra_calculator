@@ -8,9 +8,7 @@ Version 2.2
 
 '''
 ########################################
-trying to add error handling for determinant
-to calculate determinant pages.
-handling if the size entered is not a number
+ 
 ########################################
 '''
 
@@ -186,6 +184,8 @@ class App:
 
         
     def calculate_determinant(self):
+        self.matrix_size = self.matrix_size_entry.get()
+        
         self.update_frame()
 
         self.location = 'calculate determinant page'
@@ -194,12 +194,14 @@ class App:
         self.calc_det_frame.grid()
 
         #logic for whether there was something entered for matrix size
-        self.matrix_size = int(self.matrix_size_entry.get())
         
-        if isinstance(self.matrix_size, int):
+
+        try:
+            self.matrix_size = int(self.matrix_size)
+            
             #row 0
             self.calc_det_title = Label(self.calc_det_frame, text = 'Calculate the Determinant', font = '16')
-            self.calc_det_title.grid(row = 0, columnspan = 4)
+            self.calc_det_title.grid(row = 0, columnspan = 5)
 
             #row 1
             self.home_button = Button(self.calc_det_frame, text = 'Home', command = self.home_page)
@@ -211,7 +213,24 @@ class App:
             self.destroy_button = Button(self.calc_det_frame, text = 'Exit', command = self.destroy)
             self.destroy_button.grid(row = 1, column = 2)
 
-        else:
+            self.description_label = Label(self.calc_det_frame, text = 'Enter the row vectors of the matrix')
+            self.description_label.grid(row = 2, columnspan = 5)
+
+            self.label_widgets = []
+            self.entry_widgets = []
+
+            self.names_input = []
+            for x in range(0, self.matrix_size): #create list of numbers as strings the length of the matrix size
+                self.names_input.append(str(x))
+
+            for i in range(0, self.matrix_size):
+                self.label_widgets.append(Label(self.calc_det_frame, text = self.names_input[i]))
+                self.entry_widgets.append(Entry(self.calc_det_frame))
+                self.label_widgets[-1].grid(row = 3+i, column = 0)
+                self.entry_widgets[-1].grid(row = 3+i, column = 1)
+
+
+        except ValueError:
             self.error_label = Label(self.calc_det_frame, text = 'Please enter a valid matrix size')
             self.error_label.grid(row = 0, columnspan = 4)
 
