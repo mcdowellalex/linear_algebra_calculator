@@ -8,7 +8,9 @@ Version 2.2
 
 '''
 ########################################
-
+trying to add error handling for determinant
+to calculate determinant pages.
+handling if the size entered is not a number
 ########################################
 '''
 
@@ -100,8 +102,8 @@ class App:
         self.calculate_dp_button = Button(self.dp_frame, text = 'Calculate', command = self.calculate_dot_product)
         self.calculate_dp_button.grid(row = 5, column = 1)    
         
-        self.back_button = Button(self.dp_frame, text = 'Home', command = self.home_page)
-        self.back_button.grid(row = 5, column = 0)
+        self.home_button = Button(self.dp_frame, text = 'Home', command = self.home_page)
+        self.home_button.grid(row = 5, column = 0)
         
         self.error_label = Label(self.dp_frame, text = '')
         self.error_label.grid(row = 6, columnspan = 5)
@@ -160,22 +162,27 @@ class App:
         self.det_label.grid(row = 0, columnspan = 2)
 
         #row 1
-        self.det_to_home_button = Button(self.det_frame, text = 'Home', command = self.home_page)
-        self.det_to_home_button.grid(row = 1)
+        self.home_button = Button(self.det_frame, text = 'Home', command = self.home_page)
+        self.home_button.grid(row = 1)
 
         self.destroy_button = Button(self.det_frame, text = 'Exit', command = self.destroy)
         self.destroy_button.grid(row = 1, column = 1)
 
         #row 2
-        self.det_size_label = Label(self.det_frame, text = 'Size of matrix:')
-        self.det_size_label.grid(row = 2)
+        self.matrix_size = 'n'
+        self.matrix_size_label = Label(self.det_frame, text = 'Size of matrix:')
+        self.matrix_size_label.grid(row = 2)
 
-        self.det_size_entry = Entry(self.det_frame, width = 5)
-        self.det_size_entry.grid(row = 2, column = 1)
+        self.matrix_size_entry = Entry(self.det_frame, width = 5)
+        self.matrix_size_entry.grid(row = 2, column = 1)
 
         #row 3
         self.det_get_matrix_button = Button(self.det_frame, text = 'Get matrix', command = self.calculate_determinant)
         self.det_get_matrix_button.grid(row = 3, column = 1)
+
+        #row 4
+        self.error_label = Label(self.det_frame, text = '')
+        self.error_label.grid(row = 4)
 
         
     def calculate_determinant(self):
@@ -186,10 +193,34 @@ class App:
         self.calc_det_frame = Frame(self.master)
         self.calc_det_frame.grid()
 
+        #logic for whether there was something entered for matrix size
+        self.matrix_size = int(self.matrix_size_entry.get())
         
-        
+        if isinstance(self.matrix_size, int):
+            #row 0
+            self.calc_det_title = Label(self.calc_det_frame, text = 'Calculate the Determinant', font = '16')
+            self.calc_det_title.grid(row = 0, columnspan = 4)
+
+            #row 1
+            self.home_button = Button(self.calc_det_frame, text = 'Home', command = self.home_page)
+            self.home_button.grid(row = 1)
+
+            self.back_button = Button(self.calc_det_frame, text = 'Back', command = self.determinant)
+            self.back_button.grid(row = 1, column = 1)
             
-    
+            self.destroy_button = Button(self.calc_det_frame, text = 'Exit', command = self.destroy)
+            self.destroy_button.grid(row = 1, column = 2)
+
+        else:
+            self.error_label = Label(self.calc_det_frame, text = 'Please enter a valid matrix size')
+            self.error_label.grid(row = 0, columnspan = 4)
+
+            self.back_button = Button(self.calc_det_frame, text = 'Back', command = self.determinant)
+            self.back_button.grid(row = 1, column = 0)
+            
+
+        
+
 
 '''
 inititalize the window with the frame
