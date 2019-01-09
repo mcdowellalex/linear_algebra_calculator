@@ -58,8 +58,8 @@ class App:
             self.ev_frame.destroy()
         elif self.location == 'determinant page':
             self.det_frame.destroy()
-        elif self.location == 'calculate determinant page':
-            self.calc_det_frame.destroy()
+        elif self.location == 'get determinant matrix page':
+            self.get_det_matrix_frame.destroy()
     
     def destroy(self):
         self.master.destroy()
@@ -175,7 +175,7 @@ class App:
         self.matrix_size_entry.grid(row = 2, column = 1)
 
         #row 3
-        self.det_get_matrix_button = Button(self.det_frame, text = 'Get matrix', command = self.calculate_determinant)
+        self.det_get_matrix_button = Button(self.det_frame, text = 'Get matrix', command = self.get_determinant_matrix)
         self.det_get_matrix_button.grid(row = 3, column = 1)
 
         #row 4
@@ -183,15 +183,15 @@ class App:
         self.error_label.grid(row = 4)
 
         
-    def calculate_determinant(self):
+    def get_determinant_matrix(self):
         self.matrix_size = self.matrix_size_entry.get()
         
         self.update_frame()
 
-        self.location = 'calculate determinant page'
+        self.location = 'get determinant matrix page'
         
-        self.calc_det_frame = Frame(self.master)
-        self.calc_det_frame.grid()
+        self.get_det_matrix_frame = Frame(self.master)
+        self.get_det_matrix_frame.grid()
 
         #logic for whether there was something entered for matrix size
         
@@ -199,44 +199,67 @@ class App:
         try:
             self.matrix_size = int(self.matrix_size)
             
-            #row 0
-            self.calc_det_title = Label(self.calc_det_frame, text = 'Calculate the Determinant', font = '16')
-            self.calc_det_title.grid(row = 0, columnspan = 5)
-
-            #row 1
-            self.home_button = Button(self.calc_det_frame, text = 'Home', command = self.home_page)
-            self.home_button.grid(row = 1)
-
-            self.back_button = Button(self.calc_det_frame, text = 'Back', command = self.determinant)
-            self.back_button.grid(row = 1, column = 1)
+            if self.matrix_size <= 1:
+                self.error_label = Label(self.get_det_matrix_frame, text = 'Please enter a valid matrix size')
+                self.error_label.grid(row = 0, columnspan = 4)
             
-            self.destroy_button = Button(self.calc_det_frame, text = 'Exit', command = self.destroy)
-            self.destroy_button.grid(row = 1, column = 2)
+                self.back_button = Button(self.get_det_matrix_frame, text = 'Back', command = self.determinant)
+                self.back_button.grid(row = 1, column = 0)
+            else:
+                #row 0
+                self.calc_det_title = Label(self.get_det_matrix_frame, text = 'Calculate the Determinant', font = '16')
+                self.calc_det_title.grid(row = 0, columnspan = 5)
 
-            self.description_label = Label(self.calc_det_frame, text = 'Enter the row vectors of the matrix')
-            self.description_label.grid(row = 2, columnspan = 5)
+                #row 1
+                self.home_button = Button(self.get_det_matrix_frame, text = 'Home', command = self.home_page)
+                self.home_button.grid(row = 1)
 
-            self.label_widgets = []
-            self.entry_widgets = []
+                self.back_button = Button(self.get_det_matrix_frame, text = 'Back', command = self.determinant)
+                self.back_button.grid(row = 1, column = 1)
+                
+                self.destroy_button = Button(self.get_det_matrix_frame, text = 'Exit', command = self.destroy)
+                self.destroy_button.grid(row = 1, column = 2)
 
-            self.names_input = []
-            for x in range(0, self.matrix_size): #create list of numbers as strings the length of the matrix size
-                self.names_input.append(str(x))
+                self.description_label = Label(self.get_det_matrix_frame, text = 'Enter the row vectors of the matrix')
+                self.description_label.grid(row = 2, columnspan = 5)
+                self.description_label_2 = Label(self.get_det_matrix_frame, text = 'ex: (1,2,3) or (1 2 3)')
+                self.description_label_2.grid(row = 3, columnspan = 5)
 
-            for i in range(0, self.matrix_size):
-                self.label_widgets.append(Label(self.calc_det_frame, text = self.names_input[i]))
-                self.entry_widgets.append(Entry(self.calc_det_frame))
-                self.label_widgets[-1].grid(row = 3+i, column = 0)
-                self.entry_widgets[-1].grid(row = 3+i, column = 1)
+                self.label_widgets = []
+                self.entry_widgets = []
+
+                self.names_input = []
+                for x in range(0, self.matrix_size): #create list of numbers as strings the length of the matrix size
+                    self.names_input.append(str(x))
+
+                for i in range(0, self.matrix_size):
+                    self.label_widgets.append(Label(self.get_det_matrix_frame, text = self.names_input[i] + ': ('))
+                    self.label_widgets[-1].grid(row = 4+i, column = 0)
+
+                    self.entry_widgets.append(Entry(self.get_det_matrix_frame))
+                    self.entry_widgets[-1].grid(row = 4+i, column = 1)
+                    Label(self.get_det_matrix_frame, text = ')').grid(row = 4+i, column = 2)
+
+                self.calculate_button = Button(self.get_det_matrix_frame, text = 'Calculate', command = self.calculate_determinant)
+                self.calculate_button.grid(column = 1)
+
 
 
         except ValueError:
-            self.error_label = Label(self.calc_det_frame, text = 'Please enter a valid matrix size')
+            self.error_label = Label(self.get_det_matrix_frame, text = 'Please enter a valid matrix size')
             self.error_label.grid(row = 0, columnspan = 4)
 
-            self.back_button = Button(self.calc_det_frame, text = 'Back', command = self.determinant)
+            self.back_button = Button(self.get_det_matrix_frame, text = 'Back', command = self.determinant)
             self.back_button.grid(row = 1, column = 0)
-            
+    
+    def calculate_determinant(self):
+        self.columns_of_rows = []
+
+        for i in self.entry_widgets:
+            self.columns_of_rows.append(i.get())
+
+        
+
 
         
 
