@@ -242,9 +242,7 @@ class App:
 
                 self.calculate_button = Button(self.get_det_matrix_frame, text = 'Calculate', command = self.calculate_determinant)
                 self.calculate_button.grid(column = 1)
-
-
-
+                
         except ValueError:
             self.error_label = Label(self.get_det_matrix_frame, text = 'Please enter a valid matrix size')
             self.error_label.grid(row = 0, columnspan = 4)
