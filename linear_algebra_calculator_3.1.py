@@ -240,7 +240,7 @@ class App:
                     self.entry_widgets[-1].grid(row = 4+i, column = 1)
                     Label(self.get_det_matrix_frame, text = ')').grid(row = 4+i, column = 2)
 
-                self.calculate_button = Button(self.get_det_matrix_frame, text = 'Calculate', command = self.calculate_determinant)
+                self.calculate_button = Button(self.get_det_matrix_frame, text = 'Calculate', command = self.get_matrix)
                 self.calculate_button.grid(column = 1)
                 
         except ValueError:
@@ -250,11 +250,42 @@ class App:
             self.back_button = Button(self.get_det_matrix_frame, text = 'Back', command = self.determinant)
             self.back_button.grid(row = 1, column = 0)
     
-    def calculate_determinant(self):
-        self.columns_of_rows = []
+    def get_matrix(self):
+        self.rows = []
 
         for i in self.entry_widgets:
-            self.columns_of_rows.append(i.get())
+            self.rows.append(i.get())
+
+        self.calculate_determinant(self.rows)
+
+    def calculate_determinant(self, rows):
+        if len(rows) == 2:
+            ans = (rows[0[0]] * rows[1[1]]) - (rows[0[1]] * rows[1[0]]) #basic determinant calculation = a*d - b*c
+            return ans
+
+        else:
+            self.coefficients = rows[0] #first row is all the coefficients for the determinant
+            rows.pop(0) #remove the row of coefficients
+
+            for j in range(len(rows[0])):
+                if j % 2 == 0: #the number is even so the coefficient is even
+                    new_rows = rows
+                    for i in new_rows:
+                        i.pop(j)
+                         
+                    self.coefficients[j] * self.calculate_determinant(new_rows)
+
+                else: #the number is odd so the coefficient is odd
+                    new_rows = rows
+                    for i in new_rows:
+                        i.pop(j)
+
+                    -(self.coefficients[j]) * self.calculate_determinant(new_rows)
+
+
+
+
+
 
         
 
