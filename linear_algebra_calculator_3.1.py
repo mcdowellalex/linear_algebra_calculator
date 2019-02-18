@@ -145,6 +145,9 @@ class App:
         self.ev_title = Label(self.ev_frame, text = 'Eigenvalue Calculator', font = '16')
         self.ev_title.grid(row = 0, columnspan = 2)
 
+        self.ev_label = Label(self.ev_frame, text = 'more to come soon')
+        self.ev_label.grid()
+
 
 
     def determinant(self):
