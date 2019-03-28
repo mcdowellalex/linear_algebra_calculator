@@ -263,7 +263,7 @@ class App:
 
     def calculate_determinant(self, rows):
         if len(rows) == 2:
-            ans = (rows[0[0]] * rows[1[1]]) - (rows[0[1]] * rows[1[0]]) #basic determinant calculation = a*d - b*c
+            ans = (int(rows[0][0]) * int(rows[1][1])) - (int(rows[0][1]) * int(rows[1][0])) #basic determinant calculation = a*d - b*c
             return ans
 
         else:
