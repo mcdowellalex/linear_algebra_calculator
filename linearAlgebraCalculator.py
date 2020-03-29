@@ -1,8 +1,6 @@
 '''
-This is a linear algebra calculator
+linear algebra calculator
 author: Alex McDowell
-December 2018
-Version 2.2
 '''
 
 
